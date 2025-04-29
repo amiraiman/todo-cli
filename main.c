@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 /**
  * Reads a string from standard input until a specified stop character or EOF is
@@ -57,11 +58,37 @@ char *read_stdin(char until) {
   return temp;
 }
 
-int main() {
-  printf("Hi there! What's your name?\n");
-  char *name = read_stdin('\n');
-  printf("Hello %s\n", name);
-  free(name);
+void print_menu() {
+  size_t len = 5;
+  char *options[] = {
+      "Set save file location", "List all todos",  "List completed todos",
+      "List uncompleted todos", "View statistics",
+  };
 
+  printf("\e[1;1H\e[2J"); // Clear screen
+  printf("====================MAIN MENU==================\n");
+  printf("What would you like to do (press q to quit)?\n");
+  for (size_t i = 0; i < len; i++) {
+    printf("%zu) %s?\n", (i + 1), options[i]);
+  }
+}
+
+void main_loop() {
+  char *option;
+
+  while (1) {
+    print_menu();
+    option = read_stdin('\n');
+
+    if (strlen(option) == 1 && *option == 'q') {
+      break;
+    }
+  }
+
+  free(option);
+}
+
+int main() {
+  main_loop();
   return 0;
 }
